@@ -3,7 +3,7 @@
         {
             "Board": "ESP32_DEV",
             "Device": "00:00:00:00:00:00",
-            "Version": "1.0.0",
+            "Version": "1.0.1",
             "URL": "https://raw.githubusercontent.com/hariprasad-kj/smart_sprout/main/motor_controller.bin"
         }
     ]
