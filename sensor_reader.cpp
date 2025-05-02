@@ -4,21 +4,28 @@
 #include "config.h"
 #include "telegram_handler.h"
 
+float previousLevel = 0;
+
 void sendWaterDataToFirebase(float waterLevel, float waterPercentage, float waterVolume) {
-  HTTPClient http;
-  String url = String(FIREBASE_URL) + "/waterData.json?auth=" + String(FIREBASE_AUTH);
-  String payload = "{\"level\": " + String(waterLevel, 2) + ", \"percentage\": " + String(waterPercentage, 2) + ", \"volume\": " + String(waterVolume, 2) + "}";
+  if (previousLevel != waterLevel) {
+    previousLevel = waterLevel;
+    HTTPClient http;
+    String url = String(FIREBASE_URL) + "/waterData.json?auth=" + String(FIREBASE_AUTH);
+    String payload = "{\"level\": " + String(waterLevel, 2) + ", \"percentage\": " + String(waterPercentage, 2) + ", \"volume\": " + String(waterVolume, 2) + "}";
 
-  http.begin(url);
-  http.addHeader("Content-Type", "application/json");
+    http.begin(url);
+    http.addHeader("Content-Type", "application/json");
 
-  int httpCode = http.PUT(payload);
-  if (httpCode == 200) {
-    log("Water Level: " + String(waterLevel, 2)+ " cm, Water Percentage: " + String(waterPercentage, 2) + " %, Water Volume: " + String(waterVolume, 2) + " liters");
+    int httpCode = http.PUT(payload);
+    if (httpCode == 200) {
+      log("Water Level: " + String(waterLevel, 2)+ " cm, Water Percentage: " + String(waterPercentage, 2) + " %, Water Volume: " + String(waterVolume, 2) + " liters");
+    } else {
+      log("Failed to update Firebase. HTTP code: " + String(httpCode));
+    }
+    http.end();
   } else {
-    log("Failed to update Firebase. HTTP code: " + String(httpCode));
+    log("same reading...Not saving...Water Level: " + String(waterLevel, 2));
   }
-  http.end();
 }
 
 void readSensor() {
