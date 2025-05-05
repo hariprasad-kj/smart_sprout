@@ -11,6 +11,7 @@
 #include "reboot_handler.h"
 
 unsigned long lastRebootTime = 0;
+boolean startUpMotorState = true;
 
 void setup() {
   lastRebootTime = millis();
@@ -22,7 +23,8 @@ void setup() {
 
 void loop() {
   checkOtaUpdateRequired();
-  readAndUpdateMotorStatus();
+  readAndUpdateMotorStatus(startUpMotorState);
+  startUpMotorState = false;
   checkAndReboot(lastRebootTime);
   readSensor();
   delay(20000);  // Longer delay before the next set of readings to prevent rapid output

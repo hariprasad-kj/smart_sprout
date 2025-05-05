@@ -23,15 +23,16 @@ String fetchStatus() {
   return result;
 }
 
-void setMotorState(const String& state) {
+void setMotorState(const String& state, boolean startUpMotorState) {
   int pinState = (state.equalsIgnoreCase("ON")) ? LOW : HIGH;
   digitalWrite(MOTOR_LINE_A, pinState);
   digitalWrite(MOTOR_LINE_B, pinState);
-  logMotorStatus(state);
+  if (!startUpMotorState) {
+    logMotorStatus(state);
+  }
 }
 
 void logMotorStatus(const String& status) {
-  // 1. Get timestamp
   struct tm timeinfo;
   if (!getLocalTime(&timeinfo)) {
     Serial.println("⚠️ Failed to obtain time");
@@ -63,11 +64,11 @@ void logMotorStatus(const String& status) {
   http.end();
 }
 
-void readAndUpdateMotorStatus() {
+void readAndUpdateMotorStatus(const boolean startUpMotorState) {
   String currentStatus = fetchStatus();
   if (currentStatus != "" && currentStatus != lastStatus) {
     lastStatus = currentStatus;
-    setMotorState(currentStatus);
+    setMotorState(currentStatus, startUpMotorState);
     log("➡️ Polled: " + currentStatus);
   }
 }

@@ -5,7 +5,7 @@
 
 String fetchStatus();
 void setMotorState(const String& state);
-void readAndUpdateMotorStatus();
+void readAndUpdateMotorStatus(const boolean startUpMotorState);
 void logMotorStatus(const String& status);
 
 #endif
