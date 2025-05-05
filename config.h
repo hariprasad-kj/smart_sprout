@@ -7,6 +7,7 @@
 #define FIREBASE_AUTH "CtR8kZphjGJ4vGClS14g4BbD9azbK9qfibwPXGHB"
 #define FIREBASE_STATUS_PATH "/status.json?auth=" FIREBASE_AUTH
 #define FIREBASE_UPDATE_FLAG_PATH "/otaUpdate.json?auth=" FIREBASE_AUTH
+#define FIREBASE_MOTOR_STATUS_LOG_PATH "/motorStatus.json?auth=" FIREBASE_AUTH
 #define BOT_TOKEN "7715761765:AAH5ZKkJOO5tdWBxc8rnhKw-Y2W26hrI5VQ"
 #define CHAT_ID "643776779"
 #define FIRMWARE_URL "https://raw.githubusercontent.com/hariprasad-kj/smart_sprout/main/motor_controller.bin"

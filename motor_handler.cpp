@@ -1,19 +1,19 @@
 #include <Arduino.h>
 #include <HTTPClient.h>
+#include <time.h>
 #include "config.h"
 #include "telegram_handler.h"
+#include "motor_handler.h"
 
-String lastStatus = "OFF";
+String lastStatus = "";
 
-String fetchStatus()
-{
+String fetchStatus() {
   HTTPClient http;
   http.begin(String(FIREBASE_URL) + FIREBASE_STATUS_PATH);
   int httpCode = http.GET();
   String result = "";
 
-  if (httpCode == 200)
-  {
+  if (httpCode == 200) {
     result = http.getString();
     result.trim();
     result.replace("\"", "");
@@ -23,19 +23,49 @@ String fetchStatus()
   return result;
 }
 
-void setMotorState(const String &state)
-{
+void setMotorState(const String& state) {
   int pinState = (state.equalsIgnoreCase("ON")) ? LOW : HIGH;
   digitalWrite(MOTOR_LINE_A, pinState);
   digitalWrite(MOTOR_LINE_B, pinState);
+  logMotorStatus(state);
 }
 
-void readAndUpdateMotorStatus()
-{
+void logMotorStatus(const String& status) {
+  // 1. Get timestamp
+  struct tm timeinfo;
+  if (!getLocalTime(&timeinfo)) {
+    Serial.println("⚠️ Failed to obtain time");
+    return;
+  }
+
+  char timeString[30];
+  strftime(timeString, sizeof(timeString), "%Y-%m-%d %H:%M:%S", &timeinfo);
+
+  // 2. Prepare JSON payload
+  String payload = "{";
+  payload += "\"status\": \"" + status + "\", ";
+  payload += "\"time\": \"" + String(timeString) + "\"";
+  payload += "}";
+
+  // 3. POST to Firebase list (creates a unique push ID)
+  HTTPClient http;
+  String url = String(FIREBASE_URL) + "/motorHistory.json?auth=" + String(FIREBASE_AUTH);
+
+  http.begin(url);
+  http.addHeader("Content-Type", "application/json");
+
+  int httpCode = http.POST(payload);
+  if (httpCode == 200) {
+    Serial.println("✅ Motor status logged: " + payload);
+  } else {
+    Serial.println("⚠️ Failed to log motor status. HTTP code: " + String(httpCode));
+  }
+  http.end();
+}
+
+void readAndUpdateMotorStatus() {
   String currentStatus = fetchStatus();
-  log("testing this");
-  if (currentStatus != "" && currentStatus != lastStatus)
-  {
+  if (currentStatus != "" && currentStatus != lastStatus) {
     lastStatus = currentStatus;
     setMotorState(currentStatus);
     log("➡️ Polled: " + currentStatus);

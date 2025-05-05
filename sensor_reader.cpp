@@ -5,10 +5,10 @@
 #include "telegram_handler.h"
 
 float previousLevel = 0;
+const int thresholdDelta = 5;
 
 void sendWaterDataToFirebase(float waterLevel, float waterPercentage, float waterVolume) {
-  if (previousLevel != waterLevel) {
-    previousLevel = waterLevel;
+  if (abs(waterLevel - previousLevel) >= thresholdDelta) {
     HTTPClient http;
     String url = String(FIREBASE_URL) + "/waterData.json?auth=" + String(FIREBASE_AUTH);
     String payload = "{\"level\": " + String(waterLevel, 2) + ", \"percentage\": " + String(waterPercentage, 2) + ", \"volume\": " + String(waterVolume, 2) + "}";
@@ -24,8 +24,9 @@ void sendWaterDataToFirebase(float waterLevel, float waterPercentage, float wate
     }
     http.end();
   } else {
-    log("same reading...Not saving...Water Level: " + String(waterLevel, 2));
+    log("No significant change... Not saving, water Level: " + String(waterLevel, 2));
   }
+  previousLevel = waterLevel;
 }
 
 void readSensor() {
