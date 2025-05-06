@@ -9,6 +9,7 @@ const int thresholdDelta = 5;
 
 void sendWaterDataToFirebase(float waterLevel, float waterPercentage, float waterVolume) {
   if (abs(waterLevel - previousLevel) >= thresholdDelta) {
+    previousLevel = waterLevel;
     HTTPClient http;
     String url = String(FIREBASE_URL) + "/waterData.json?auth=" + String(FIREBASE_AUTH);
     String payload = "{\"level\": " + String(waterLevel, 2) + ", \"percentage\": " + String(waterPercentage, 2) + ", \"volume\": " + String(waterVolume, 2) + "}";
@@ -26,10 +27,9 @@ void sendWaterDataToFirebase(float waterLevel, float waterPercentage, float wate
   } else {
     log("No significant change... Not saving, water Level: " + String(waterLevel, 2));
   }
-  previousLevel = waterLevel;
 }
 
-void readSensor() {
+void readSensor(float tankHeight) {
   long duration[NUM_READINGS];  // Array to store durations
   float distances[NUM_READINGS];  // Array to store distances
   float sum = 0;
@@ -75,10 +75,10 @@ void readSensor() {
     averageDistance = sum / validCount;
     
     // Calculate water level height
-    float waterLevelHeight = TANK_HEIGHT - averageDistance; // in cm
+    float waterLevelHeight = tankHeight - averageDistance; // in cm
 
     // Calculate percentage of water
-    float waterPercentage = (waterLevelHeight / TANK_HEIGHT) * 100.0;
+    float waterPercentage = (waterLevelHeight / tankHeight) * 100.0;
 
     // Calculate volume of water in cm³
     float waterVolume = waterLevelHeight * TANK_LENGTH * TANK_BREADTH; // in cm³
@@ -91,4 +91,21 @@ void readSensor() {
   } else {
     Serial.println("No valid readings");
   }
+}
+
+float readTankHeight() {
+  HTTPClient http;
+  http.begin(String(FIREBASE_URL) + FIREBASE_TANK_HEIGHT_PATH);
+  int httpCode = http.GET();
+  float value = 0.0;
+
+  if (httpCode == 200) {
+    String result = http.getString();
+    result.trim();
+    result.replace("\"", "");
+    value = result.toFloat();
+  }
+
+  http.end();
+  return value;
 }

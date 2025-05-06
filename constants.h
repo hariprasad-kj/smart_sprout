@@ -2,6 +2,8 @@
 #define CONSTANTS_H
 
 #define REBOOT_INTERVAL 3600000UL
+#define HEALTH_INTERVAL  (10UL * 60UL * 1000UL)
+#define SENSOR_INTERVAL 20000UL
 #define NUM_READINGS 5
 #define MAX_DISTANCE 400.0  // Maximum expected distance (cm)
 #define TANK_HEIGHT 100.0 // in cm

@@ -7,5 +7,8 @@ String fetchStatus();
 void setMotorState(const String& state);
 void readAndUpdateMotorStatus(const boolean startUpMotorState);
 void logMotorStatus(const String& status);
+void autoTurnOff(int autoTurnOffTime);
+void turnOffMotor();
+int readAutoTurnOffTime();
 
 #endif

@@ -2,6 +2,7 @@
 #define SENSOR_READER_H
 
 void sendWaterDataToFirebase(float waterLevel, float waterPercentage, float waterVolume);
-void readSensor();
+void readSensor(float tankHeight);
+float readTankHeight();
 
 #endif
