@@ -7,6 +7,8 @@
 #define FIREBASE_AUTH "CtR8kZphjGJ4vGClS14g4BbD9azbK9qfibwPXGHB"
 #define FIREBASE_STATUS_PATH "/status.json?auth=" FIREBASE_AUTH
 #define FIREBASE_AUTO_TURN_OFF_TIME_PATH "/autoTurnOffTime.json?auth=" FIREBASE_AUTH
+#define FIREBASE_AUTO_TURN_ON_TIME_PATH "/autoTurnOnTime.json?auth=" FIREBASE_AUTH
+#define FIREBASE_AUTO_TURN_ON_ENABLED_PATH "/autoTurnOnEnabled.json?auth=" FIREBASE_AUTH
 #define FIREBASE_HEALTH_CHECK_TIME_PATH "/healthCheckDelay.json?auth=" FIREBASE_AUTH
 #define FIREBASE_UPDATE_FLAG_PATH "/otaUpdate.json?auth=" FIREBASE_AUTH
 #define FIREBASE_MOTOR_STATUS_LOG_PATH "/motorStatus.json?auth=" FIREBASE_AUTH
@@ -17,8 +19,8 @@
 #define FIRMWARE_URL "https://raw.githubusercontent.com/hariprasad-kj/smart_sprout/main/motor_controller.bin"
 #define MOTOR_LINE_A 32
 #define MOTOR_LINE_B 33
-#define TRIGGER_PIN  23
-#define ECHO_PIN     22
+#define TRIGGER_PIN 23
+#define ECHO_PIN 22
 
 void setupPins();
 void waitForTimeSync();

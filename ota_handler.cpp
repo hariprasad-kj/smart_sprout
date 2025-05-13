@@ -4,25 +4,31 @@
 #include <Update.h>
 #include "config.h"
 #include "telegram_handler.h"
+#include "firebase_handler.h"
 
-void performOTA() {
+void performOTA()
+{
   WiFiClientSecure client;
-  client.setInsecure();  // Accept all certificates (for testing)
+  client.setInsecure(); // Accept all certificates (for testing)
 
   HTTPClient https;
 
-  if (https.begin(client, String(FIRMWARE_URL))) {
+  if (https.begin(client, String(FIRMWARE_URL)))
+  {
     int httpCode = https.GET();
-    if (httpCode == HTTP_CODE_OK) {
+    if (httpCode == HTTP_CODE_OK)
+    {
       int len = https.getSize();
-      if (len <= 0) {
+      if (len <= 0)
+      {
         Serial.println("Content-Length not available.");
         https.end();
         return;
       }
 
       bool canBegin = Update.begin(len);
-      if (!canBegin) {
+      if (!canBegin)
+      {
         Serial.println("Not enough space for OTA");
         https.end();
         return;
@@ -32,13 +38,17 @@ void performOTA() {
       size_t written = 0;
       uint8_t buff[128] = {0};
 
-      while (https.connected() && len > 0) {
+      while (https.connected() && len > 0)
+      {
         size_t availableSize = stream->available();
-        if (availableSize) {
+        if (availableSize)
+        {
           int readSize = stream->readBytes(buff, ((availableSize > sizeof(buff)) ? sizeof(buff) : availableSize));
-          if (readSize > 0) {
+          if (readSize > 0)
+          {
             written = Update.write(buff, readSize);
-            if (written != readSize) {
+            if (written != readSize)
+            {
               Serial.println("Write failed!");
               https.end();
               return;
@@ -49,60 +59,51 @@ void performOTA() {
         delay(1);
       }
 
-      if (Update.end()) {
-        if (Update.isFinished()) {
+      if (Update.end())
+      {
+        if (Update.isFinished())
+        {
           Serial.println("OTA update successful!");
-        } else {
+        }
+        else
+        {
           Serial.println("OTA update not finished.");
         }
-      } else {
+      }
+      else
+      {
         Serial.println("Error Occurred. Error #: " + String(Update.getError()));
       }
-    } else {
+    }
+    else
+    {
       Serial.println("Failed to connect, HTTP code: " + String(httpCode));
     }
     https.end();
-  } else {
+  }
+  else
+  {
     Serial.println("HTTPS unable to begin");
   }
 }
 
-void resetOTAFlag() {
-  HTTPClient http;
+void resetOTAFlag()
+{
   String url = String(FIREBASE_URL) + "/otaUpdate.json?auth=" + String(FIREBASE_AUTH);
-  String payload = "\"NO\"";  // Send the string "NO"
-
-  http.begin(url);
-  http.addHeader("Content-Type", "application/json");
-
-  int httpCode = http.PUT(payload);
-  if (httpCode == 200) {
-    log("✅ OTA flag reset to no.");
-  } else {
-    log("⚠️ Failed to reset OTA flag. HTTP code: " + String(httpCode));
-  }
-  http.end();
+  String payload = "\"NO\""; // Send the string "NO"
+  updateValue(url, payload, "✅ OTA flag reset to no.", "⚠️ Failed to reset OTA flag.");
 }
 
-const char* fetchOtaUpdate() {
-  HTTPClient http;
-  http.begin(String(FIREBASE_URL) + FIREBASE_UPDATE_FLAG_PATH);
-  int httpCode = http.GET();
-  static String result = "";  // Static to persist after the function returns
-
-  if (httpCode == 200) {
-    result = http.getString();
-    result.trim();
-    result.replace("\"", "");
-  }
-
-  http.end();
-  return result.c_str();  // Return C-string (const char*)
+String fetchOtaUpdate()
+{
+  return getValue(String(FIREBASE_URL) + FIREBASE_UPDATE_FLAG_PATH, "fetchOtaUpdate() in ota_handler.h");
 }
 
-void checkOtaUpdateRequired() {
-  const char* otaUpdateNeeded = fetchOtaUpdate();
-  if (strcmp(otaUpdateNeeded, "YES") == 0) {
+void checkOtaUpdateRequired()
+{
+  String otaUpdateNeeded = fetchOtaUpdate();
+  if (otaUpdateNeeded == "YES")
+  {
     log("🚀 OTA update triggered via Firebase!");
     performOTA();
     resetOTAFlag();

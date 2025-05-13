@@ -4,11 +4,17 @@
 #include <Arduino.h>
 
 String fetchStatus();
-void setMotorState(const String& state);
-void readAndUpdateMotorStatus(const boolean startUpMotorState);
-void logMotorStatus(const String& status);
+void setMotorState(const String &state);
+void readAndUpdateMotorStatus();
+void scheduledTurnOn(String autoTurnOnTime, boolean isAutoTurnOnEnabled);
+void sendLogToFirebase(String date, String on, String off);
 void autoTurnOff(int autoTurnOffTime);
-void turnOffMotor();
+void turnStatusOffInFirebase();
 int readAutoTurnOffTime();
+String readAutoTurnOnTime();
+boolean readAutoTurnOnEnabled();
+void turnStatusOnInFirebase();
+void createDateLogInFirebase();
+void updateDateLogInFirebase();
 
 #endif

@@ -3,7 +3,7 @@
 
 void performOTA();
 void resetOTAFlag();
-const char* fetchOtaUpdate();
+String fetchOtaUpdate();
 void checkOtaUpdateRequired();
 
 #endif
