@@ -1,0 +1,10 @@
+.custom-badge {
+    display: inline-block;
+    background-color: #28a745;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+}

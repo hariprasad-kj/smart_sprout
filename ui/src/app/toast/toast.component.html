@@ -1,0 +1,11 @@
+<div *ngIf="showToast" class="toasts-bottom-right fixed">
+    <div class="toast {{toast.type}} fade show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="mr-auto">{{toast.title}}</strong>
+            <small>{{toast.subTitle}}</small>
+        </div>
+        <div class="toast-body">
+            {{toast.message}}
+        </div>
+    </div>
+</div>

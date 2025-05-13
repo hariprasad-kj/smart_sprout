@@ -1,0 +1,40 @@
+{
+  "hosting": {
+    "public": "dist/smart-sprout",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "!/assets/**",
+        "destination": "/index.html"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/assets/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      },
+      {
+        "source": "/assets/*.bin",
+        "headers": [
+          {
+            "key": "Content-Encoding",
+            "value": "identity"
+          }
+        ]
+      }
+    ]
+  }
+}

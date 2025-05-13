@@ -1,0 +1,54 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4 w-100" *ngIf="showSidebar">
+    <a [routerLink]="'/dashboard'" class="brand-link">
+        <button class="btn btn-link d-md-none" (click)="toggleSidebar()" style="font-size: 1.5rem;">
+            &#9776;
+        </button>
+        <span class="brand-text font-weight-light">🌿 Smart Sprinkler</span>
+    </a>
+    <div class="sidebar">
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item cp">
+                    <a class="nav-link" (click)="menuClicked('/dashboard')">
+                        <fa-icon class="nav-icon" [icon]='faTachometer'></fa-icon>
+                        <p>
+                            Dashboard
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item cp">
+                    <a class="nav-link" (click)="menuClicked('/profile')">
+                        <fa-icon class="nav-icon" [icon]='faUser'></fa-icon>
+                        <p>
+                            Profile
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item cp">
+                    <a class="nav-link" (click)="menuClicked('/activity')">
+                        <fa-icon class="nav-icon" [icon]='faChartLine'></fa-icon>
+                        <p>
+                            Activity
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item cp" *ngIf="role === 'admin'">
+                    <a class="nav-link" (click)="menuClicked('/settings')">
+                        <fa-icon class="nav-icon" [icon]='faCog'></fa-icon>
+                        <p>
+                            Settings
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item cp">
+                    <a class="nav-link" (click)="menuClicked('/settings')">
+                        <fa-icon class="nav-icon" [icon]='faMapMarkerAlt'></fa-icon>
+                        <p>
+                            Location
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>

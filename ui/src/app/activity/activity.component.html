@@ -1,0 +1,28 @@
+<section class="content pl-2 pr-2 pt-3">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <ul>
+                    <li class="timeline-item-1" *ngFor="let group of map">
+                        <div class="date cp" (click)="toggleLog(group)">
+                            {{group.date}}<small>({{group.logs.length}})</small>
+                        </div>
+                        <div *ngFor="let item of group.logs" [class]="item.className">
+                            <div class="title">
+                                <div class="row">
+                                    <div class="col">
+                                        {{item.action}} by {{item.user}}
+                                    </div>
+                                    <div class="col text-right">
+                                        <fa-icon [icon]='faClock'></fa-icon>
+                                        {{item.timestamp|date:'shortTime'}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

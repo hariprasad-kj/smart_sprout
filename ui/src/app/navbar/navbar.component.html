@@ -1,0 +1,22 @@
+<nav class="main-header navbar navbar-expand navbar-white navbar-light" *ngIf="showSidebar">
+    <button class="btn btn-link d-md-none d-lg-none" (click)="toggleSidebar()" style="font-size: 1.5rem;">
+        &#9776;
+    </button>
+    <a [routerLink]="'/dashboard'" class="d-lg-none d-md-none brand-link p-0">
+        <span class="brand-text text-dark">🌿 Smart Sprinkler</span>
+    </a>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item position-relative">
+            <a class="nav-link" [title]="isChipAlive ? 'Online' : 'Offline'">
+                <fa-icon [icon]='faMicrochip'></fa-icon>
+                <span class="custom-badge rounded-circle {{isChipAlive ? 'bg-success' : 'bg-danger'}}"></span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link cp" data-widget="control-sidebar" data-controlsidebar-slide="true" role="button"
+                (click)="logout()">
+                <fa-icon [icon]='faPowerOff'></fa-icon>
+            </a>
+        </li>
+    </ul>
+</nav>

@@ -1,0 +1,159 @@
+<div class="content pl-2 pr-2 pt-3">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <div class="row">
+                    <div class="col">
+                        <div class="info-box cp" (click)="changeMotorStatus()">
+                            <span class="info-box-icon bg-info elevation-1">
+                                <fa-icon [icon]="faTint"></fa-icon>
+                            </span>
+                            <div class="info-box-content">
+                                <div class="water-drop-container" *ngIf="motorStatus === 'ON'">
+                                    <div class="drop drop1"></div>
+                                    <div class="drop drop2"></div>
+                                    <div class="drop drop3"></div>
+                                </div>
+                                <span class="info-box-text">Motor</span>
+                                <span class="info-box-number">
+                                    {{motorStatus}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="lastAction">
+                    <div class="col">
+                        <div class="info-box mb-3 ">
+                            <span class="info-box-icon bg-success elevation-1">
+                                <fa-icon [icon]='faClock'></fa-icon>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Last Action</span>
+                                <span class="info-box-text">
+                                    {{lastAction.user}}
+                                    <fa-icon [icon]='faClock'></fa-icon>
+                                    {{lastAction.timestamp|relativeTime}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="info-box mb-3 ">
+                            <span class="info-box-icon bg-success elevation-1">
+                                <fa-icon [icon]='faWater'></fa-icon>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Water</span>
+                                <span class="info-box-number">
+                                    {{water|number:'1.2-2'}}
+                                    <small>%</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="info-box mb-3 ">
+                            <span class="info-box-icon bg-success elevation-1">
+                                <fa-icon [icon]='faTemperatureHigh'></fa-icon>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Temperature</span>
+                                <app-overlay *ngIf="!currentWeather"></app-overlay>
+                                <span class="info-box-number" *ngIf="currentWeather">
+                                    {{currentWeather.current_weather.temperature|number:'1.2-2'}}
+                                    <small>{{currentWeather.current_weather_units.temperature}}</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="info-box mb-3 ">
+                            <span class="info-box-icon bg-success elevation-1">
+                                <fa-icon [icon]='faCloudSunRain'></fa-icon>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Humidity</span>
+                                <app-overlay *ngIf="!hourWeather"></app-overlay>
+                                <span class="info-box-number" *ngIf="hourWeather">
+                                    {{hourWeather.relativehumidity_2m}}
+                                    <small>%</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="info-box mb-3 ">
+                            <span class="info-box-icon bg-success elevation-1">
+                                <fa-icon [icon]='rainIcon'></fa-icon>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Rain forecast</span>
+                                <app-overlay *ngIf="!hourWeather"></app-overlay>
+                                <span class="info-box-number" *ngIf="hourWeather">
+                                    {{rainMessage}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header ui-sortable-handle">
+                        <h3 class="card-title">
+                            <fa-icon [icon]='faChartPie' class="mr-1"></fa-icon>
+                            Metrics
+                        </h3>
+                        <div class="card-tools">
+                            <ul class="nav nav-pills ml-auto">
+                                <li class="nav-item" (click)="collectHealthMetrics()">
+                                    <a class="nav-link {{chartShowing === 1 ? 'active' : ''}} cp"
+                                        data-toggle="tab">Heap</a>
+                                </li>
+                                <li class="nav-item" (click)="showMotorChart()">
+                                    <a class="nav-link {{chartShowing === 2 ? 'active' : ''}} cp"
+                                        data-toggle="tab">History</a>
+                                </li>
+                                <li class="nav-item" (click)="showTemperatureChart()">
+                                    <a class="nav-link {{chartShowing === 3 ? 'active' : ''}} cp"
+                                        data-toggle="tab">Temperature</a>
+                                </li>
+                                <li class="nav-item" (click)="showHumidityChart()">
+                                    <a class="nav-link {{chartShowing === 4 ? 'active' : ''}} cp"
+                                        data-toggle="tab">Humidity</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content p-0">
+                            <div class="chart tab-pane {{chartShowing === 1 ? 'active' : ''}}" *ngIf="healthChartData">
+                                <app-chart [chartData]="healthChartData"></app-chart>
+                            </div>
+                            <div class="chart tab-pane {{chartShowing === 2 ? 'active' : ''}}" *ngIf="motorChartData">
+                                <app-chart [chartData]="motorChartData"></app-chart>
+                            </div>
+                            <div class="chart tab-pane {{chartShowing === 3 ? 'active' : ''}}"
+                                *ngIf="temperatureChartData">
+                                <app-chart [chartData]="temperatureChartData"></app-chart>
+                            </div>
+                            <div class="chart tab-pane {{chartShowing === 4 ? 'active' : ''}}"
+                                *ngIf="humidityChartData">
+                                <app-chart [chartData]="humidityChartData"></app-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
