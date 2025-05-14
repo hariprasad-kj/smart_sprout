@@ -24,7 +24,6 @@ import { OverlayComponent } from './overlay/overlay.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivityComponent } from './activity/activity.component';
-import { LocationComponent } from './location/location.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ProfileComponent } from './profile/profile.component';
 import { ChartComponent } from './chart/chart.component';
@@ -44,7 +43,6 @@ import { ToastComponent } from './toast/toast.component';
     SplitPipe,
     OverlayComponent,
     ActivityComponent,
-    LocationComponent,
     ProfileComponent,
     ChartComponent,
     UnwrapPipe,

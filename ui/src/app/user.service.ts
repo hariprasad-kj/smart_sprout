@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { User } from './def';
-import { Database, onValue, ref } from '@angular/fire/database';
-import { Observable, of } from 'rxjs';
+import { FIREBASE_URL, User, UserResponse } from './def';
+import { map, Observable, of } from 'rxjs';
+import { FirebaseService } from './firebase.service';
+import { HttpClient } from '@angular/common/http';
+import { DataShareService } from './data-share.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ export class UserService {
   private userCache: User[] | null = null;
   private readonly CACHE_KEY = 'userCache';
 
-  constructor(private db: Database) {
+  constructor(private firebaseService: FirebaseService, private http: HttpClient, private dataService: DataShareService) {
     const stored = localStorage.getItem(this.CACHE_KEY);
     if (stored) {
       try {
@@ -23,29 +25,12 @@ export class UserService {
     }
   }
 
-  getUserByEmail(email: string): Observable<User | null> {
-    return new Observable<User | null>((observer) => {
-      const usersRef = ref(this.db, 'user');
-
-      onValue(
-        usersRef,
-        (snapshot) => {
-          const data = snapshot.val();
-
-          if (data && typeof data === 'object') {
-            const entries = Object.values(data) as User[];
-            const name = entries.find(loc => loc?.email === email);
-            observer.next(name ?? null);
-            observer.complete();
-          } else {
-            observer.error('No data or invalid format');
-          }
-        },
-        (error) => {
-          observer.error(error);
-        }
-      );
-    });
+  getUserByEmail(email: string): Observable<User> {
+    let url = FIREBASE_URL + "/user.json?equalTo=%22" + email + "%22&orderBy=%22email%22";
+    return this.http.get<UserResponse>(url).pipe(map((response => {
+      const key = Object.keys(response)[0];
+      return response[key];
+    })))
   }
 
   clearUserCache() {
@@ -57,30 +42,21 @@ export class UserService {
     if (this.userCache) {
       return of(this.userCache);
     }
+    return this.firebaseService.getRealTimeData<User[]>("/user")
+  }
 
-    return new Observable<User[]>((observer) => {
-      const usersRef = ref(this.db, 'user');
+  getLoggedInUserDetails(): Observable<User | null> {
+    const email = this.firebaseService.getLoggedInUserEmail()
+    if (!email) return of(null)
+    return this.getUserByEmail(email)
+  }
 
-      onValue(usersRef, (snapshot) => {
-        const data = snapshot.val();
-
-        if (data) {
-          const users = Object.values(data) as User[];
-          this.userCache = users;
-
-          // Save to localStorage
-          localStorage.setItem(this.CACHE_KEY, JSON.stringify(users));
-
-          observer.next(users);
-        } else {
-          this.userCache = [];
-          localStorage.setItem(this.CACHE_KEY, '[]');
-          observer.next([]);
-        }
-      }, (error) => {
-        observer.error(error);
-      });
-    });
+  updateUser(user: User) {
+    if (!this.getUserByEmail(user.email)) {
+      this.firebaseService.updateFirebaseProperty<User>("/user", user, "updated").then(() => {
+        this.dataService.showSuccessToast("Updated name", "Updated name of the user");
+      })
+    }
   }
 
 }

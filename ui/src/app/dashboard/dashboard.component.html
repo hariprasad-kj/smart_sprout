@@ -106,30 +106,46 @@
                     </div>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                 <div class="card">
                     <div class="card-header ui-sortable-handle">
                         <h3 class="card-title">
                             <fa-icon [icon]='faChartPie' class="mr-1"></fa-icon>
                             Metrics
                         </h3>
-                        <div class="card-tools">
-                            <ul class="nav nav-pills ml-auto">
+                        <div class="card-tools w-100 d-flex justify-content-center">
+                            <ul class="nav nav-pills mx-auto">
                                 <li class="nav-item" (click)="collectHealthMetrics()">
-                                    <a class="nav-link {{chartShowing === 1 ? 'active' : ''}} cp"
+                                    <a class="nav-link d-none d-sm-block {{chartShowing === 1 ? 'active' : ''}} cp"
                                         data-toggle="tab">Heap</a>
+                                    <a class="nav-link d-md-none d-lg-none mt-3 pt-1 pb-1 {{chartShowing === 1 ? 'active' : ''}} cp"
+                                        data-toggle="tab">
+                                        <fa-icon [icon]='faLayerGroup'></fa-icon>
+                                    </a>
                                 </li>
                                 <li class="nav-item" (click)="showMotorChart()">
-                                    <a class="nav-link {{chartShowing === 2 ? 'active' : ''}} cp"
+                                    <a class="nav-link d-none d-sm-block {{chartShowing === 2 ? 'active' : ''}} cp"
                                         data-toggle="tab">History</a>
+                                    <a class="nav-link d-md-none d-lg-none mt-3 pt-1 pb-1 {{chartShowing === 2 ? 'active' : ''}} cp"
+                                        data-toggle="tab">
+                                        <fa-icon [icon]='faClock'></fa-icon>
+                                    </a>
                                 </li>
                                 <li class="nav-item" (click)="showTemperatureChart()">
-                                    <a class="nav-link {{chartShowing === 3 ? 'active' : ''}} cp"
+                                    <a class="nav-link d-none d-sm-block {{chartShowing === 3 ? 'active' : ''}} cp"
                                         data-toggle="tab">Temperature</a>
+                                    <a class="nav-link d-md-none d-lg-none mt-3 pt-1 pb-1 {{chartShowing === 3 ? 'active' : ''}} cp"
+                                        data-toggle="tab">
+                                        <fa-icon [icon]='faTemperatureHigh'></fa-icon>
+                                    </a>
                                 </li>
                                 <li class="nav-item" (click)="showHumidityChart()">
-                                    <a class="nav-link {{chartShowing === 4 ? 'active' : ''}} cp"
+                                    <a class="nav-link d-none d-sm-block {{chartShowing === 4 ? 'active' : ''}} cp"
                                         data-toggle="tab">Humidity</a>
+                                    <a class="nav-link d-md-none d-lg-none mt-3 pt-1 pb-1 {{chartShowing === 4 ? 'active' : ''}} cp"
+                                        data-toggle="tab">
+                                        <fa-icon [icon]='faCloudSunRain'></fa-icon>
+                                    </a>
                                 </li>
                             </ul>
                         </div>

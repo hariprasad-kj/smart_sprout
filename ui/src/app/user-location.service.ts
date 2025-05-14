@@ -1,29 +1,27 @@
 import { Injectable } from '@angular/core';
 import { getDatabase, Database, onValue, ref, set, push, get, child } from '@angular/fire/database';
 import { combineLatest, Observable, of } from 'rxjs';
-import { getAuth } from 'firebase/auth';
 import { LocationData, MapData, UserLocation } from './def';
 import { UserService } from './user.service';
 import { map } from 'rxjs/operators';
+import { FirebaseService } from './firebase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserLocationService {
 
-  constructor(private db: Database, private userService: UserService) { }
+  constructor(private db: Database, private userService: UserService, private firebaseService: FirebaseService) { }
 
   async setUserLocation(data: MapData) {
     const db = getDatabase();
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (!user) return;
-
+    const email = this.firebaseService.getLoggedInUserEmail()
+    if (!email) return;
     const locationRef = ref(db, 'userLocation');
     const locationData = {
-      email: user.email,
-      lat: data.location.lat,
-      long: data.location.lon,
+      email: email,
+      lat: (+data.location.lat).toFixed(3),
+      long: (+data.location.lon).toFixed(3),
       place: data.location.display_name,
       zoom: data.zoom,
       timestamp: Date.now()
@@ -35,7 +33,7 @@ export class UserLocationService {
       let existingKey: string | null = null;
 
       for (const [key, value] of Object.entries(userLocations)) {
-        if ((value as any)?.email === user.email) {
+        if ((value as any)?.email === email) {
           existingKey = key;
           break;
         }
@@ -78,18 +76,14 @@ export class UserLocationService {
   }
 
   getUserLocationInfo(): Observable<UserLocation | null> {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (user && user.email) {
-      let email: string = user.email;
-      const location$ = this.collectUserLocation(email);
-      const user$ = this.userService.getUserByEmail(email);
+    const email = this.firebaseService.getLoggedInUserEmail()
+    if (!email) return of(null)
+    const location$ = this.collectUserLocation(email);
+    const user$ = this.userService.getUserByEmail(email);
 
-      return combineLatest([user$, location$]).pipe(
-        map(([user, location]) => ({ user, location }))
-      );
-    }
-    return of(null)
+    return combineLatest([user$, location$]).pipe(
+      map(([user, location]) => ({ user, location }))
+    );
   }
 
 }

@@ -1,7 +1,7 @@
 <section class="content pl-2 pr-2 pt-3">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                 <div class="card card-primary">
                     <div class="card-header">
                         <h3 class="card-title">Application Settings</h3>
@@ -14,25 +14,50 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-2 asc">
+                            <div class="col-1 asc d-md-none d-lg-none">
+                                <label class="pt-1 pb-1" title="Tank Height">
+                                    <fa-icon [icon]='faOilCan'></fa-icon>
+                                </label>
+                            </div>
+                            <div class="col-2 asc d-none d-sm-block">
                                 <label class="fw-semibold">Tank Height</label>
                             </div>
+
                             <div class="col">
                                 <hr class="dot-hr">
                             </div>
-                            <div class="col-2 mb-2">
+
+                            <div class="col-3 mb-2 d-md-none d-lg-none">
+                                <input type="number" max="100" min="0.01" step="0.01"
+                                    class="form-control form-control-sm" [(ngModel)]="tankHeight">
+                            </div>
+                            <div class="col-2 mb-2 d-none d-sm-block">
                                 <input type="number" max="100" min="0.01" step="0.01"
                                     class="form-control form-control-sm" [(ngModel)]="tankHeight">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-4 asc">
+                            <div class="col-4 asc d-none d-sm-block">
                                 <label class="fw-semibold">Water Level Notifaction Delta</label>
                             </div>
+                            <div class="col-2 asc d-md-none d-lg-none">
+                                <fa-icon [icon]="faTint" class="text-primary"></fa-icon>
+                                <fa-icon [icon]="faBullhorn" class="text-success"></fa-icon>
+                            </div>
+
                             <div class="col">
                                 <hr class="dot-hr">
                             </div>
-                            <div class="col-2 mb-2">
+
+                            <div class="col-2 mb-2 d-none d-sm-block">
+                                <select class="form-control form-control-sm" [(ngModel)]="waterLevelNotificationDelta">
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <div class="col-3 mb-2 d-md-none d-lg-none">
                                 <select class="form-control form-control-sm" [(ngModel)]="waterLevelNotificationDelta">
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -42,13 +67,29 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-5 asc">
+                            <div class="col-5 asc d-none d-sm-block">
                                 <label class="fw-semibold">Water Level History Notification Delta</label>
                             </div>
+                            <div class="col-3 asc d-md-none d-lg-none">
+                                <fa-icon [icon]="faTint" class="text-primary"></fa-icon>
+                                <fa-icon [icon]="faClock" class="text-primary"></fa-icon>
+                                <fa-icon [icon]="faBullhorn" class="text-success"></fa-icon>
+                            </div>
+
                             <div class="col">
                                 <hr class="dot-hr">
                             </div>
-                            <div class="col-2 mb-2">
+
+                            <div class="col-2 mb-2 d-none d-sm-block">
+                                <select class="form-control form-control-sm"
+                                    [(ngModel)]="waterLevelHistoryNotificationDelta">
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <div class="col-3 mb-2 d-md-none d-lg-none">
                                 <select class="form-control form-control-sm"
                                     [(ngModel)]="waterLevelHistoryNotificationDelta">
                                     <option value="2">2</option>
@@ -59,38 +100,69 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-4 asc">
+                            <div class="col-4 asc d-none d-sm-block">
                                 <label class="fw-semibold">Auto turn off time (in seconds)</label>
                             </div>
+                            <div class="col-3 asc d-md-none d-lg-none">
+                                <fa-icon [icon]="faHourglassHalf" class="text-warning"></fa-icon>
+                                <fa-icon [icon]="faPowerOff" class="text-danger ml-1"></fa-icon>
+                            </div>
+
                             <div class="col">
                                 <hr class="dot-hr">
                             </div>
-                            <div class="col-2 mb-2">
+
+                            <div class="col-2 mb-2 d-none d-sm-block">
+                                <input type="number" max="100" min="0.01" step="0.01"
+                                    class="form-control form-control-sm" [(ngModel)]="autoTurnOffTime">
+                            </div>
+                            <div class="col-3 mb-2 d-md-none d-lg-none">
                                 <input type="number" max="100" min="0.01" step="0.01"
                                     class="form-control form-control-sm" [(ngModel)]="autoTurnOffTime">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-4 asc">
+                            <div class="col-3 asc d-md-none d-lg-none">
+                                <fa-icon [icon]="faStethoscope" class="text-info"></fa-icon>
+                                <fa-icon [icon]="faHourglassHalf" class="text-warning ml-1"></fa-icon>
+                            </div>
+                            <div class="col-4 asc d-none d-sm-block">
                                 <label class="fw-semibold">Health check delay (in seconds)</label>
                             </div>
+
                             <div class="col">
                                 <hr class="dot-hr">
                             </div>
-                            <div class="col-2 mb-2">
+
+                            <div class="col-3 mb-2 d-md-none d-lg-none">
+                                <input type="number" max="100" min="0.01" step="0.01"
+                                    class="form-control form-control-sm" [(ngModel)]="healthCheckDelay">
+                            </div>
+                            <div class="col-2 mb-2 d-none d-sm-block">
                                 <input type="number" max="100" min="0.01" step="0.01"
                                     class="form-control form-control-sm" [(ngModel)]="healthCheckDelay">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-2 asc">
+                            <div class="col-1 acc d-md-none d-lg-none">
+                                <input type="checkbox" [(ngModel)]="autoTurnOnEnabled" id="autoTurnOn">
+                            </div>
+                            <div class="col-3 asc d-md-none d-lg-none">
+                                <fa-icon [icon]="faPlug" class="text-success"></fa-icon>
+                                <fa-icon [icon]="faClock" class="text-primary ml-1"></fa-icon>
+                            </div>
+                            <div class="col-2 asc d-none d-sm-block">
                                 <input type="checkbox" [(ngModel)]="autoTurnOnEnabled" id="autoTurnOn">
                                 <label class="fw-semibold cp ml-1" for="autoTurnOn">Auto turn on</label>
                             </div>
                             <div class="col">
                                 <hr class="dot-hr">
                             </div>
-                            <div class="col-2 mb-2">
+                            <div class="col-5 mb-2 d-md-none d-lg-none">
+                                <input [disabled]="!autoTurnOnEnabled" class="form-control form-control-sm" type="time"
+                                    [(ngModel)]="autoTurnOnTime">
+                            </div>
+                            <div class="col-2 mb-2 d-none d-sm-block">
                                 <input [disabled]="!autoTurnOnEnabled" class="form-control form-control-sm" type="time"
                                     [(ngModel)]="autoTurnOnTime">
                             </div>
@@ -103,7 +175,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4" *ngIf="health$ | async as health">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" *ngIf="health$ | async as health">
                 <div class="row">
                     <div class="col">
                         <div class="info-box">

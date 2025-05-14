@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { faChevronCircleLeft, faClock } from '@fortawesome/free-solid-svg-icons';
 import { UserService } from '../user.service';
 import { UserActivityService } from '../user-activity.service';
+import { DataShareService } from '../data-share.service';
 
 @Component({
   selector: 'app-activity',
@@ -20,9 +21,10 @@ export class ActivityComponent implements OnInit {
 
   faClock = faClock;
 
-  constructor(private userService: UserService, private userActivityService: UserActivityService) { }
+  constructor(private userService: UserService, private userActivityService: UserActivityService, private dataService: DataShareService) { }
 
   ngOnInit(): void {
+    this.dataService.notifyUrlChange('activity');
     this.loadUsers();
     this.userActivityService.loadLogs();
     this.userActivityService.logs$.subscribe(logs => {

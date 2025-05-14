@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { getDatabase, onValue, ref, set, push } from '@angular/fire/database';
-import { getAuth } from 'firebase/auth';
 import { BehaviorSubject } from 'rxjs';
 import { ActivityLog } from './def';
+import { FirebaseService } from './firebase.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,18 +12,13 @@ export class UserActivityService {
   private logsSubject = new BehaviorSubject<ActivityLog[]>([]);
   logs$ = this.logsSubject.asObservable();
 
-  constructor() { }
+  constructor(private firebaseService: FirebaseService) { }
 
   addActivity(status: string, system?: string) {
     const db = getDatabase();
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (!user || !user.email) return;
-    var email;
+    var email = this.firebaseService.getLoggedInUserEmail();
     if (system) {
       email = "esp32@example.com"
-    } else {
-      email = user.email;
     }
 
     const logRef = ref(db, 'activityLogs');

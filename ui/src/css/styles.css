@@ -144,6 +144,10 @@ body.sidebar-open .sidebar-overlay {
     align-self: center;
 }
 
+.acc {
+    align-content: center;
+}
+
 .dot-hr {
     border-top: 1px dashed #ccc;
     position: absolute;
@@ -152,4 +156,9 @@ body.sidebar-open .sidebar-overlay {
     transform: translateY(-50%);
     z-index: 1;
     margin: 0;
+}
+
+.chart {
+    width: 100%;
+    min-height: 300px;
 }

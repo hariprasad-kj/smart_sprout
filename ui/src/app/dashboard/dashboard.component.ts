@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartDef, DeviceLogByDate, getRainIcon, HourlyMap, LastAction, MotorLog, Motorlogs, MotorOnOff, RainMessage, standardiseDate, timeDiff, WaterData, Weather } from '../def';
-import { faChartPie, faClock, faCloudSunRain, faFaucet, faTemperatureHigh, faTint, faWater, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faChartPie, faClock, faCloudSunRain, faLayerGroup, faTemperatureHigh, faTint, faWater, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { WeatherService } from '../weather.service';
 import { DatePipe } from '@angular/common';
 import { FirebaseService } from '../firebase.service';
@@ -24,6 +24,7 @@ export class DashboardComponent implements OnInit {
   faTemperatureHigh = faTemperatureHigh;
   faCloudSunRain = faCloudSunRain;
   faChartPie = faChartPie;
+  faLayerGroup = faLayerGroup;
 
   title = 'SmartSprout';
   motorStatus: string = "";
@@ -35,10 +36,12 @@ export class DashboardComponent implements OnInit {
   hourWeather!: HourlyMap;
   rainMessage: RainMessage = RainMessage.None;
   rainIcon!: IconDefinition;
+
   motorChartData!: ChartDef
   temperatureChartData!: ChartDef
   humidityChartData!: ChartDef
   healthChartData!: ChartDef
+
   dates: string[] = [];
   freeHeap: number[] = []
   chartShowing: number = 1;
@@ -58,6 +61,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dataService.notifyUrlChange('dashboard');
     this.loadMotorStatus();
     this.loadLastAction();
     this.collectMotorStatus(true);

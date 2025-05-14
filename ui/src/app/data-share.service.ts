@@ -12,8 +12,8 @@ export class DataShareService {
   private isAliveSubject: EventEmitter<boolean> = new EventEmitter();
   public isAlive$ = this.isAliveSubject.asObservable();
 
-  private roleSubject: EventEmitter<string> = new EventEmitter();
-  public role$ = this.roleSubject.asObservable();
+  private urlSubject: EventEmitter<string> = new EventEmitter();
+  public url$ = this.urlSubject.asObservable();
 
   constructor() { }
 
@@ -36,8 +36,8 @@ export class DataShareService {
     this.isAliveSubject.next(isAlive)
   }
 
-  notifyRole(role: string) {
-    this.roleSubject.next(role)
+  notifyUrlChange(url: string) {
+    this.urlSubject.next(url)
   }
 
 }

@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { HealthMetrics } from '../def';
-import { faSave, faRefresh, faMicrochip, faMemory, faWifi, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faRefresh, faMicrochip, faMemory, faWifi, faRulerVertical, faTint, faBullhorn, faClock, faPowerOff, faStethoscope, faPlug } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
 import { FirebaseService } from '../firebase.service';
 import { HealthService } from '../health.service';
 import { MotorService } from '../motor.service';
 import { RebootService } from '../reboot.service';
 import { DataShareService } from '../data-share.service';
+import { faHourglassHalf } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-settings',
@@ -28,6 +29,14 @@ export class SettingsComponent implements OnInit {
   faMicrochip = faMicrochip;
   faMemory = faMemory;
   faWifi = faWifi;
+  faOilCan = faRulerVertical;
+  faTint = faTint;
+  faBullhorn = faBullhorn;
+  faClock = faClock;
+  faHourglassHalf = faHourglassHalf;
+  faPowerOff = faPowerOff;
+  faStethoscope = faStethoscope;
+  faPlug = faPlug;
 
   health$: Observable<HealthMetrics>;
 
@@ -40,6 +49,7 @@ export class SettingsComponent implements OnInit {
     this.health$ = this.healthService.getLastHealthData();
   }
   ngOnInit(): void {
+    this.dataService.notifyUrlChange('settings');
     this.fireBaseService.getRealTimeData<string>("/tankHeight").subscribe(data => this.tankHeight = +(data + ""))
     this.fireBaseService.getRealTimeData<string>("/autoTurnOffTime").subscribe(data => this.autoTurnOffTime = +(data + ""))
     this.fireBaseService.getRealTimeData<string>("/healthCheckDelay").subscribe(data => this.healthCheckDelay = +(data + ""))

@@ -63,6 +63,10 @@ export interface LastAction {
     timestamp: number;
 }
 
+export interface UserResponse {
+    [key: string]: User;
+}
+
 export interface User {
     email: string;
     name: string;
@@ -275,3 +279,9 @@ export enum ToastType {
     SUCCESS = 'bg-success',
     WARNING = 'bg-warning'
 }
+
+export const ROLE_PERMISSIONS: Map<string, string[]> = new Map([
+    ['user', ['dashboard', 'profile', 'activity']],
+    ['guest', ['dashboard', 'profile', 'activity']],
+    ['admin', ['dashboard', 'profile', 'activity', 'settings']]
+]);

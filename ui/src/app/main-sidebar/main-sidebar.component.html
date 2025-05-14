@@ -8,6 +8,14 @@
     <div class="sidebar">
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <fa-icon class="nav-icon" [icon]='faUser'></fa-icon>
+                        <p>
+                            {{name}}
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item cp">
                     <a class="nav-link" (click)="menuClicked('/dashboard')">
                         <fa-icon class="nav-icon" [icon]='faTachometer'></fa-icon>
@@ -18,7 +26,7 @@
                 </li>
                 <li class="nav-item cp">
                     <a class="nav-link" (click)="menuClicked('/profile')">
-                        <fa-icon class="nav-icon" [icon]='faUser'></fa-icon>
+                        <fa-icon class="nav-icon" [icon]='faIdCard'></fa-icon>
                         <p>
                             Profile
                         </p>
@@ -37,14 +45,6 @@
                         <fa-icon class="nav-icon" [icon]='faCog'></fa-icon>
                         <p>
                             Settings
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item cp">
-                    <a class="nav-link" (click)="menuClicked('/settings')">
-                        <fa-icon class="nav-icon" [icon]='faMapMarkerAlt'></fa-icon>
-                        <p>
-                            Location
                         </p>
                     </a>
                 </li>

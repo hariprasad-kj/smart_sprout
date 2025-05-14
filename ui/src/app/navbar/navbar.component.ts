@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth, signOut } from '@angular/fire/auth';
-import { NavigationEnd, Router, Event as RouterEvent } from '@angular/router';
+import { Router } from '@angular/router';
 import { faCog, faMicrochip, faPowerOff, faTint } from '@fortawesome/free-solid-svg-icons';
-import { filter } from 'rxjs';
 import { HealthMetrics } from '../def';
 import { FirebaseService } from '../firebase.service';
 import { HealthService } from '../health.service';
 import { UserService } from '../user.service';
 import { DataShareService } from '../data-share.service';
-import { getAuth } from 'firebase/auth';
 
 @Component({
   selector: 'app-navbar',
@@ -17,8 +15,7 @@ import { getAuth } from 'firebase/auth';
 })
 export class NavbarComponent implements OnInit {
   name: string | null = '';
-  currentUrl = "";
-  showSidebar = false;
+  showNavBar = false;
   loggedIn!: Auth;
   isChipAlive = false;
 
@@ -34,11 +31,6 @@ export class NavbarComponent implements OnInit {
     private userService: UserService,
     private dataService: DataShareService
   ) {
-    router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.showSidebar = !event.url.includes('/login');
-      }
-    });
   }
 
   toggleSidebar() {
@@ -53,6 +45,7 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataService.url$.subscribe(data => this.showNavBar = data !== 'login')
     setInterval(() => {
       this.healthService.getLastHealthData().subscribe(data => {
         this.fireBaseService.getRealTimeData<number>("/healthCheckDelay").subscribe(delay => {
@@ -68,14 +61,6 @@ export class NavbarComponent implements OnInit {
       })
     }, 10000)
     this.loggedIn = this.auth
-    this.name = sessionStorage.getItem("name")
-    this.router.events
-      .pipe(filter((event: RouterEvent): event is NavigationEnd => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        this.currentUrl = event.urlAfterRedirects;
-        this.showSidebar = this.currentUrl !== '/login'
-      });
-
   }
 
   logout() {

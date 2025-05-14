@@ -9,10 +9,10 @@ import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { "adminOnly": false } },
-  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard], data: { "adminOnly": true } },
-  { path: 'activity', component: ActivityComponent, canActivate: [AuthGuard], data: { "adminOnly": false } },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { "adminOnly": false } },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
+  { path: 'activity', component: ActivityComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/login', pathMatch: 'prefix' }
 ];
 

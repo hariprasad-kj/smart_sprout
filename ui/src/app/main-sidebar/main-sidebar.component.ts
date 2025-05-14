@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { faChartLine, faCog, faMapMarkerAlt, faPowerOff, faTachometerAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Auth } from '@angular/fire/auth';
-import { NavigationEnd, Router, Event as RouterEvent } from '@angular/router';
-import { filter } from 'rxjs';
+import { Router } from '@angular/router';
+import { faIdCard } from '@fortawesome/free-regular-svg-icons';
+import { User } from '../def';
+import { UserService } from '../user.service';
 import { DataShareService } from '../data-share.service';
 
 @Component({
@@ -16,6 +18,7 @@ export class MainSidebarComponent implements OnInit {
   currentUrl = "";
   showSidebar = false;
   role: string = "";
+  user!: User
 
   faPowerOff = faPowerOff;
   faCog = faCog;
@@ -23,22 +26,25 @@ export class MainSidebarComponent implements OnInit {
   faTachometer = faTachometerAlt;
   faMapMarkerAlt = faMapMarkerAlt;
   faChartLine = faChartLine;
+  faIdCard = faIdCard;
 
   constructor(private auth: Auth,
     private router: Router,
-    private dataService: DataShareService
+    private dataService: DataShareService,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
-    this.dataService.role$.subscribe(role => this.role = role)
-    this.router.events
-      .pipe(filter((event: RouterEvent): event is NavigationEnd => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        this.currentUrl = event.urlAfterRedirects;
-        this.showSidebar = this.currentUrl !== '/login'
-      });
     this.loggedIn = this.auth
-    this.name = sessionStorage.getItem("name")
+    this.dataService.url$.subscribe(data => {
+      this.showSidebar = (data !== 'login')
+      if (this.showSidebar && this.loggedIn && this.loggedIn.currentUser && this.loggedIn.currentUser.email) {
+        this.userService.getUserByEmail(this.loggedIn.currentUser.email).subscribe(data => {
+          this.name = data.name
+          this.role = data.role
+        })
+      }
+    })
   }
 
   toggleSidebar() {
